@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <title>Five Div Example</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+/* Variables */
+:root {
+  --primary-color: #646cff;
+  --hover-color: #535bf2;
+  --background-color: #070707;
+  --text-color-white: white;
+  --text-color-rest: rgba(255, 255, 255, 0.7);
+  --text-color-hover: rgba(255, 255, 255, 0.8);
+  --text-color-active: rgba(255, 255, 255, 1);
+  --ripple-color: rgba(100, 108, 255, 0.3);
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --transition-duration: 0.25s;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+  --ripple-duration: 0.7s;
+  --control-size: 24px;
+  --control-border: 2px;
+  --focus-ring-size: 4px;
+  --ripple-size: 44px;
+  --checkmark-width: 6px;
+  --checkmark-height: 12px;
+  --radio-dot-size: 12px;
+}
+
+/* Base Styles */
+body {
+  display: flex;
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(0deg, #171921 55.66%, #08090a 100%);
+  color: var(--text-color-white);
+  font-family: "Inter", sans-serif;
+}
+
+.form-controls {
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+  min-height: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+}
+.form-controls form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  gap: 124px;
+}
+@media screen and (max-width: 600px) {
+  .form-controls form {
+    flex-direction: column;
+  }
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+fieldset legend {
+  padding: 0;
+  margin-bottom: var(--spacing-md);
+  font-weight: bolder;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #282828;
+}
+
+/* Shared Input Styles */
+.radio .radio-input, .checkbox .checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.radio .radio-control, .checkbox .checkbox-control {
+  position: relative;
+  width: var(--control-size);
+  height: var(--control-size);
+  min-width: var(--control-size);
+  min-height: var(--control-size);
+  border: var(--control-border) solid var(--primary-color);
+  transition: all var(--transition-duration) var(--transition-timing);
+}
+
+/* Checkbox Styles */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+.checkbox .checkbox-control {
+  border-radius: 6px;
+}
+.checkbox .checkbox-control::before, .checkbox .checkbox-control::after {
+  content: "";
+  position: absolute;
+  transition: transform var(--transition-duration) var(--transition-timing), opacity var(--transition-duration) var(--transition-timing);
+  will-change: transform, opacity;
+}
+.checkbox .checkbox-control::before {
+  top: 50%;
+  left: 50%;
+  width: var(--ripple-size);
+  height: var(--ripple-size);
+  background-color: var(--ripple-color);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+}
+.checkbox .checkbox-control::after {
+  left: 50%;
+  top: 45%;
+  width: var(--checkmark-width);
+  height: var(--checkmark-height);
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg) scale(0);
+  opacity: 0;
+}
+.checkbox .checkbox-input:checked ~ .checkbox-control {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.checkbox .checkbox-input:checked ~ .checkbox-control::before {
+  animation: ripple 240ms linear;
+}
+.checkbox .checkbox-input:checked ~ .checkbox-control::after {
+  transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  opacity: 1;
+}
+.checkbox .checkbox-input:focus-visible ~ .checkbox-control {
+  box-shadow: 0 0 0 var(--focus-ring-size) rgba(100, 108, 255, 0.3);
+}
+.checkbox .checkbox-label {
+  font-size: 1rem;
+  user-select: none;
+  color: var(--text-color-rest);
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+.checkbox .checkbox-input:checked ~ .checkbox-label {
+  color: var(--text-color-active);
+  animation: label-check 0.3s var(--transition-timing);
+}
+
+/* Radio Styles */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.radio {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+.radio .radio-control {
+  border-radius: 50%;
+}
+.radio .radio-control::before, .radio .radio-control::after {
+  content: "";
+  position: absolute;
+  transition: transform var(--transition-duration) var(--transition-timing), opacity var(--transition-duration) var(--transition-timing);
+  will-change: transform, opacity;
+}
+.radio .radio-control::before {
+  top: 50%;
+  left: 50%;
+  width: var(--ripple-size);
+  height: var(--ripple-size);
+  background-color: var(--ripple-color);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+}
+.radio .radio-control::after {
+  top: 50%;
+  left: 50%;
+  width: var(--radio-dot-size);
+  height: var(--radio-dot-size);
+  border-radius: 50%;
+  background-color: white;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+}
+.radio .radio-input:checked ~ .radio-control {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.radio .radio-input:checked ~ .radio-control::before {
+  animation: ripple 240ms linear;
+}
+.radio .radio-input:checked ~ .radio-control::after {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.radio .radio-input:focus-visible ~ .radio-control {
+  box-shadow: 0 0 0 var(--focus-ring-size) rgba(100, 108, 255, 0.3);
+}
+.radio .radio-label {
+  font-size: 1rem;
+  user-select: none;
+  color: var(--text-color-rest);
+  transition: color var(--transition-duration) var(--transition-timing);
+}
+.radio .radio-input:checked ~ .radio-label {
+  color: var(--text-color-active);
+  animation: label-check 0.3s var(--transition-timing);
+}
+
+/* Animations */
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+@keyframes label-check {
+  0% {
+    transform: translateX(0);
+    opacity: 0.7;
+  }
+  40% {
+    transform: translateX(2px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+    </style>
+</head>
+<body>
+
+    <main class="form-controls">
+      <form>
+        <!-- Checkboxes -->
+        <div class="form-group" style="margin-bottom: 50px;">
+             <label class="checkbox">
+                <input class="checkbox-input" id="checkbox-input-box" type="checkbox" name="notifications">
+                <span class="checkbox-control"></span>
+                <span class="checkbox-label">Checkbox Main</span>
+              </label>
+              <button > delete button</button>
+              <button class="add"> add button</button>
+          <fieldset style="margin-top: 50px;">
+            <legend>Checkbox Group</legend>
+            <div class="checkbox-group">
+              <label class="checkbox">
+                <input class="checkbox-input" type="checkbox" name="notifications" value="checkbox 1">
+                <span class="checkbox-control"></span>
+                <span class="checkbox-label">Checkbox 1</span>
+              </label>
+
+              <label class="checkbox">
+                <input class="checkbox-input" type="checkbox" name="updates" value="checkbox 2">
+                <span class="checkbox-control"></span>
+                <span class="checkbox-label">Checkbox 2</span>
+              </label>
+
+              <label class="checkbox">
+                <input class="checkbox-input" type="checkbox" name="newsletter" value="checkbox 3">
+                <span class="checkbox-control"></span>
+                <span class="checkbox-label">Checkbox 3</span>
+              </label>
+
+              <label class="checkbox">
+                <input class="checkbox-input" type="checkbox" name="newsletter" value="checkbox 4">
+                <span class="checkbox-control"></span>
+                <span class="checkbox-label">Checkbox 4</span>
+              </label>
+
+              <label class="checkbox">
+                <input class="checkbox-input" type="checkbox" name="newsletter" value="checkbox 5">
+                <span class="checkbox-control"></span>
+                <span class="checkbox-label">Checkbox 5</span>
+              </label>
+
+              <label class="checkbox">
+                <input class="checkbox-input" type="checkbox" name="newsletter" value="checkbox 6">
+                <span class="checkbox-control"></span>
+                <span class="checkbox-label">Checkbox 6</span>
+              </label>
+
+                
+            </div>
+          </fieldset>
+      </div>
+      </form>
+    </main>
+
+    <script>
+           jQuery(document).ready(function () {
+    jQuery("#checkbox-input-box").click(function(){
+        jQuery('.checkbox-input').prop('checked', this.checked);
+    });
+    jQuery(".checkbox-input").click(function () {
+         });
+         jQuery(".add").click(function () {
+        alert(jQuery(this).val());
+   
+    });
+});
+
+    </script>
+
+</body>
+</html>
