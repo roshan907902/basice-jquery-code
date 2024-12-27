@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.js"></script>
+    <title>Five Div Example</title>
+    <style>
+body {
+  font-family: Arial, sans-serif;
+}
+
+.accordion {
+    border: 1px solid #ccc;
+    margin: 10px 0;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 40%;
+}
+
+.accordion-header {
+  background-color: #f1f1f1;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.accordion-body {
+    display: none;
+    position: relative;
+    padding: 10px;
+    background-color: #f00;
+
+}
+.absolute-div {
+  position: absolute; /* Positioned relative to the accordion body */
+  background-color: #e0e0e0;
+  padding: 5px;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+}
+.open{
+    display: none;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="accordion">
+  <div class="accordion-header">Title 1</div>
+  <div class="accordion-body">body 1</div>
+  <div class="accordion-header">Title 1</div>
+  <div class="accordion-body">body 1</div>
+  <div class="accordion-header">Title 1</div>
+  <div class="accordion-body">body 1</div>
+</div>    
+      
+    <script>
+         jQuery(document).ready(function () {
+            jQuery(".accordion-header").click(function () {
+                jQuery(".accordion-body").slideUp();
+                jQuery(this).next(".accordion-body").slideToggle();
+            });
+});
+
+    </script>
+
+</body>
+</html>
